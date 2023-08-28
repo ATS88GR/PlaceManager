@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: CREATE PLACES
+      author: ART
+      changes:
+        - createTable:
+            tableName: place_countries
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: countrydescr
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: places
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: latitude
+                  type: float8
+                  constraints:
+                    nullable: false
+              - column:
+                  name: longitude
+                  type: float8
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: areaDescr
+                  type: text
+              - column:
+                  name: country_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: country_id
+                    references: place_countries(id)
