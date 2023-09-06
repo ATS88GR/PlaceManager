@@ -1,8 +1,9 @@
 package com.education.projects.places.manager.mapper;
 
-import com.education.projects.places.manager.dto.response.CountryDtoResp;
+import com.education.projects.places.manager.response.dto.CountryDtoResp;
 import com.education.projects.places.manager.entity.Country;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

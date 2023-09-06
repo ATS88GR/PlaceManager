@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-public class PlacePage {
+public class CountryPage {
     @NotEmpty
     @Min(value = 0, message = "min value is 0")
     @Schema(name = "pageNumber", description = "Number of page", example = "0")
@@ -28,7 +28,7 @@ public class PlacePage {
 
     @NotBlank
     @Schema(name = "sortBy",
-            description = "Sorting by address/latitude/longitude",
-            example = "address")
-    private String sortBy = "address";
+            description = "Sorting by country description",
+            example = "countryDescr")
+    private String sortBy = "countryDescr";
 }

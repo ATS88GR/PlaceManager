@@ -6,7 +6,7 @@
         </layout>
     </appender>
     <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${place.home}/logs/place-manager.log</file>
+        <file>${user.home}/logs/place-manager.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/archived/app-%d{yyyy-MM-dd}.%i-logback.log</fileNamePattern>
             <maxHistory>10</maxHistory>

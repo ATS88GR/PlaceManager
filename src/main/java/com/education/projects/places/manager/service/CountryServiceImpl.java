@@ -1,14 +1,21 @@
 package com.education.projects.places.manager.service;
 
-import com.education.projects.places.manager.dto.response.CountryDtoResp;
+import com.education.projects.places.manager.entity.CountryPage;
+import com.education.projects.places.manager.entity.CountrySearchCriteria;
+import com.education.projects.places.manager.exception.CountryNotFoundException;
+import com.education.projects.places.manager.exception.EmptyException;
+import com.education.projects.places.manager.repository.CountryCriteriaRepository;
+import com.education.projects.places.manager.response.dto.CountryDtoResp;
 import com.education.projects.places.manager.entity.Country;
 import com.education.projects.places.manager.mapper.CountryMapper;
 import com.education.projects.places.manager.repository.CountryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -17,19 +24,32 @@ public class CountryServiceImpl implements CountryService {
     private CountryRepository countryRepository;
     @Autowired
     private CountryMapper countryMapper;
+    @Autowired
+    CountryCriteriaRepository countryCriteriaRepository;
 
     /**
-     * Gets all countrys objects information from database
+     * Gets all countries objects information from database
      *
      * @return The list of the Country objects
      */
-    public Collection<CountryDtoResp> getAllCountries() throws Exception{
-        try {
-            return countryMapper.countryListToCountryDtoList(countryRepository.findAll());
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public Collection<CountryDtoResp> getAllCountries() throws Exception {
+        Collection<CountryDtoResp> countryDtoResp =
+                countryMapper.countryListToCountryDtoList(countryRepository.findAll());
+        if (countryDtoResp.isEmpty()) throw new EmptyException();
+        return countryDtoResp;
+    }
+
+    /**
+     * Gets the Country DTO object information from the database by id
+     *
+     * @param id id of the country object in database
+     * @return The Country DTO object from database
+     * @throws Exception
+     */
+    public CountryDtoResp getCountryDtoById(UUID id) throws Exception {
+        if (countryRepository.existsById(id))
+            return countryMapper.countryToCountryDto(countryRepository.getReferenceById(id));
+        throw new CountryNotFoundException(id);
     }
 
     /**
@@ -39,33 +59,24 @@ public class CountryServiceImpl implements CountryService {
      * @return The Country object from database
      * @throws Exception
      */
-    public CountryDtoResp getCountryDtoById(Integer id) throws Exception {
-        try {
-            if (countryRepository.existsById(id))
-                return countryMapper.countryToCountryDto(countryRepository.getReferenceById(id));
-            else {
-                Exception e = new Exception("The country wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    public Country getCountryById(UUID id) throws Exception {
+        if (countryRepository.existsById(id))
+            return countryRepository.getReferenceById(id);
+        throw new CountryNotFoundException(id);
     }
 
-    public Country getCountryById(Integer id) throws Exception {
-        try {
-            if (countryRepository.existsById(id))
-                return countryRepository.getReferenceById(id);
-            else {
-                Exception e = new Exception("The country wasn't found");
-                log.error("Error: {}", e.getMessage());
-                throw e;
-            }
-        }catch (Exception e){
-            log.error("Error: {}", e.getMessage());
-            throw new Exception(e.getMessage());
-        }
+    /**
+     * @param countryPage           is an object with pagination settings
+     * @param countrySearchCriteria is an object with search settings
+     * @return List of users with pagination and search settings
+     * @throws Exception
+     */
+    public Page<CountryDtoResp> getSortFilterPaginCountries(CountryPage countryPage,
+                                                            CountrySearchCriteria countrySearchCriteria)
+            throws Exception {
+        Page<CountryDtoResp> countryDtoResp =
+                countryCriteriaRepository.findAllWithFilters(countryPage, countrySearchCriteria);
+        if (countryDtoResp.isEmpty()) throw new EmptyException();
+        return countryDtoResp;
     }
 }

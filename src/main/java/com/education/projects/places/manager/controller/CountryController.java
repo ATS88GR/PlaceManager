@@ -1,6 +1,11 @@
 package com.education.projects.places.manager.controller;
 
-import com.education.projects.places.manager.dto.response.CountryDtoResp;
+import com.education.projects.places.manager.entity.CountryPage;
+import com.education.projects.places.manager.entity.CountrySearchCriteria;
+import com.education.projects.places.manager.entity.PlacePage;
+import com.education.projects.places.manager.entity.PlaceSearchCriteria;
+import com.education.projects.places.manager.response.dto.CountryDtoResp;
+import com.education.projects.places.manager.response.dto.PlaceDtoResp;
 import com.education.projects.places.manager.service.CountryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +15,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -37,7 +44,23 @@ public class CountryController {
     @GetMapping("/countries")
     public ResponseEntity<Collection<CountryDtoResp>> getCountries() throws Exception {
         log.info("Get all countries info");
-        return new ResponseEntity <> (countryServiceImpl.getAllCountries(), HttpStatus.OK);
+        return new ResponseEntity<>(countryServiceImpl.getAllCountries(), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Gets sorted and filtered information about countries from database",
+            description = "Returns collection of country objects from database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal Server error")
+    })
+    @GetMapping("/sortedFilteredCountries")
+    public ResponseEntity<Page<CountryDtoResp>> getSortFilterCountriesCommon(CountryPage countryPage,
+                                                                             CountrySearchCriteria countrySearchCriteria)
+            throws Exception {
+        log.info("Get common sorted and filtered country info");
+        return new ResponseEntity<>(countryServiceImpl.getSortFilterPaginCountries(countryPage, countrySearchCriteria),
+                HttpStatus.OK);
     }
 
     @Operation(summary = "Gets country by id",
@@ -49,9 +72,10 @@ public class CountryController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/countries/{id}")
-    public ResponseEntity<CountryDtoResp> getCountryById(@PathVariable("id") @NotNull @Min(1) Integer id)
-            throws Exception{
+    public ResponseEntity<CountryDtoResp> getCountryById(
+            @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            throws Exception {
         log.info("Gets country with id = {}", id);
-        return new ResponseEntity <> (countryServiceImpl.getCountryDtoById(id), HttpStatus.OK);
+        return new ResponseEntity<>(countryServiceImpl.getCountryDtoById(id), HttpStatus.OK);
     }
 }

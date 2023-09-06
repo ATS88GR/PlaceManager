@@ -1,12 +1,17 @@
-package com.education.projects.places.manager.dto.response;
+package com.education.projects.places.manager.response.dto;
 
+import com.education.projects.places.manager.entity.Country;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class PlaceDtoResp {
+
+    @Schema(name = "id", description = "Place id", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
+    private UUID Id;
 
     @Schema (name = "latitude", description = "Place latitude", example = "65.11589054716222")
     private BigDecimal latitude;
@@ -21,6 +26,6 @@ public class PlaceDtoResp {
     @Schema (name = "areaDescr", description = "Description of area", example = "undergrowth")
     private String areaDescr;
 
-    @Schema (name = "countryId", description = "Country id", example = "3")
-    private Integer countryId;
+    @Schema (name = "country", description = "Country object")
+    private Country country;
 }

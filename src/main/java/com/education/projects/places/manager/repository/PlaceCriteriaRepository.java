@@ -1,6 +1,6 @@
 package com.education.projects.places.manager.repository;
 
-import com.education.projects.places.manager.dto.response.PlaceDtoResp;
+import com.education.projects.places.manager.response.dto.PlaceDtoResp;
 import com.education.projects.places.manager.entity.Place;
 import com.education.projects.places.manager.entity.PlacePage;
 import com.education.projects.places.manager.entity.PlaceSearchCriteria;
@@ -81,9 +81,6 @@ public class PlaceCriteriaRepository {
         if(Objects.nonNull(placeSearchCriteria.getAddress()))
             predicates.add(criteriaBuilder.like(placeRoot.get("address"),
                     "%" + placeSearchCriteria.getAddress() + "%"));
-        if(Objects.nonNull(placeSearchCriteria.getCountryId()))
-            predicates.add(criteriaBuilder.equal(placeRoot.get("country_id"),
-                    placeSearchCriteria.getCountryId()));
         return criteriaBuilder.and(predicates.toArray((new Predicate[0])));
     }
 }

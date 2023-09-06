@@ -10,14 +10,8 @@ import lombok.Setter;
 @Setter
 public class PlaceSearchCriteria {
 
-    @Schema (name = "address", description = "Address or plus-code", example = "Grodno, Gaya str, 31 or MRFV+VV3")
-    @NotBlank (message = "address should not be blank")
+    @Schema(name = "address", description = "Address or plus-code", example = "Grodno, Gaya str, 31 or MRFV+VV3")
+    @NotBlank(message = "address should not be blank")
     @Column(name = "address", nullable = false)
     private String address;
-
-    @Schema (name = "countryId", description = "Country id", example = "3")
-    @NotNull (message = "countryId should not be empty")
-    @Positive (message = "countryId should be positive")
-    @Digits(integer = 3, fraction = 0, message = "integer number of not more than 3 characters")
-    private Integer countryId;
 }

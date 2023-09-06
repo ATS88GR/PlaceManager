@@ -1,9 +1,0 @@
-INSERT INTO place_countries (countrydescr) VALUES
-('Russia'),
-('Belarus'),
-('Poland');
-
-INSERT INTO user_levels (leveldescr) VALUES
-('amatueur'),
-('phd candidate'),
-('phd');

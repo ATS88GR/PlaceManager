@@ -8,14 +8,15 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
+                    unique: true
               - column:
                   name: countrydescr
-                  type: varchar
+                  type: varchar(50)
                   constraints:
                     nullable: false
         - createTable:
@@ -23,11 +24,12 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
-                  autoIncrement: true
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
                   constraints:
                     primaryKey: true
                     nullable: false
+                    unique: true
               - column:
                   name: latitude
                   type: float8
@@ -44,12 +46,14 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: areaDescr
+                  name: area_descr
                   type: text
               - column:
                   name: country_id
-                  type: int
+                  type: uuid
                   constraints:
                     nullable: false
                     foreignKeyName: country_id
                     references: place_countries(id)
+  - include:
+      file: changelog/0001/changelog.yaml

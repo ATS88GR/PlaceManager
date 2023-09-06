@@ -1,18 +1,15 @@
 package com.education.projects.places.manager.controller;
 
-import com.education.projects.places.manager.service.DBPlaceServiceImpl;
-import com.education.projects.places.manager.dto.response.PlaceDtoResp;
-import com.education.projects.places.manager.dto.request.PlaceDtoReq;
-import com.education.projects.places.manager.entity.Place;
+import com.education.projects.places.manager.service.PlaceServiceImpl;
+import com.education.projects.places.manager.response.dto.PlaceDtoResp;
+import com.education.projects.places.manager.request.dto.PlaceDtoReq;
 import com.education.projects.places.manager.entity.PlacePage;
 import com.education.projects.places.manager.entity.PlaceSearchCriteria;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @RestController
 @Validated
@@ -31,7 +29,7 @@ import java.util.Collection;
 public class PlaceController {
 
     @Autowired
-    private DBPlaceServiceImpl dbPlaceServiceImpl;
+    private PlaceServiceImpl placeServiceImpl;
 
     @Operation(summary = "Creates new row in database with place information",
             description = "Returns created place information from database")
@@ -44,7 +42,7 @@ public class PlaceController {
     public ResponseEntity<PlaceDtoResp> createPlace (@Valid @RequestBody PlaceDtoReq placeDtoReq)
             throws Exception{
         log.info("Create place = {}", placeDtoReq);
-        return new ResponseEntity<> (dbPlaceServiceImpl.createPlace(placeDtoReq), HttpStatus.CREATED);
+        return new ResponseEntity<> (placeServiceImpl.createPlace(placeDtoReq), HttpStatus.CREATED);
     }
 
     @Operation(summary = "Updates place information by id",
@@ -57,10 +55,11 @@ public class PlaceController {
     })
     @PutMapping("/places/{id}")
     public ResponseEntity <PlaceDtoResp> updatePlace (
-            @Valid @RequestBody PlaceDtoReq placeDtoReq, @PathVariable ("id") @NotNull @Min(1) Integer id)
+            @Valid @RequestBody PlaceDtoReq placeDtoReq,
+            @PathVariable ("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
     throws Exception{
         log.info("Update place with id = {}, update place info {}", id, placeDtoReq);
-        return new ResponseEntity<>(dbPlaceServiceImpl.updatePlace(placeDtoReq, id), HttpStatus.OK);
+        return new ResponseEntity<>(placeServiceImpl.updatePlace(placeDtoReq, id), HttpStatus.OK);
     }
 
     @Operation(summary = "Gets information about all places from database",
@@ -73,7 +72,7 @@ public class PlaceController {
     @GetMapping("/places")
     public ResponseEntity <Collection<PlaceDtoResp>> getPlaces() throws Exception {
         log.info("Get all place info");
-        return new ResponseEntity <> (dbPlaceServiceImpl.getAllPlaces(), HttpStatus.OK);
+        return new ResponseEntity <> (placeServiceImpl.getAllPlaces(), HttpStatus.OK);
     }
 
     @Operation(summary = "Gets sorted and filtered information about places from database",
@@ -88,7 +87,7 @@ public class PlaceController {
                                                                       PlaceSearchCriteria placeSearchCriteria)
     throws Exception{
         log.info("Get common sorted and filtered place info");
-        return new ResponseEntity<>(dbPlaceServiceImpl.getSortedFilteredPlacesCommon(placePage, placeSearchCriteria),
+        return new ResponseEntity<>(placeServiceImpl.getSortFilterPaginPlaces(placePage, placeSearchCriteria),
                 HttpStatus.OK);
     }
 
@@ -101,10 +100,11 @@ public class PlaceController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/places/{id}")
-    public ResponseEntity<PlaceDtoResp> getPlaceById(@PathVariable ("id") @NotNull @Min(1) Integer id)
+    public ResponseEntity<PlaceDtoResp> getPlaceById(
+            @PathVariable ("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
     throws Exception{
         log.info("Gets place with id = {}", id);
-        return new ResponseEntity <> (dbPlaceServiceImpl.getPlaceById(id), HttpStatus.OK);
+        return new ResponseEntity <> (placeServiceImpl.getPlaceById(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Deletes place by id",
@@ -116,10 +116,11 @@ public class PlaceController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @DeleteMapping("/places/{id}")
-    public ResponseEntity<String> deletePlaceById(@PathVariable ("id") @NotNull @Min(1) Integer id)
+    public ResponseEntity<String> deletePlaceById(
+            @PathVariable ("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
             throws Exception {
         log.info("Deletes place with id = {}", id);
-        dbPlaceServiceImpl.deletePlaceById(id);
+        placeServiceImpl.deletePlaceById(id);
         return new ResponseEntity<>("The place deleted", HttpStatus.OK);
     }
 }
