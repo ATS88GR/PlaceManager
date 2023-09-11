@@ -56,7 +56,7 @@ public class PlaceController {
     @PutMapping("/places/{id}")
     public ResponseEntity <PlaceDtoResp> updatePlace (
             @Valid @RequestBody PlaceDtoReq placeDtoReq,
-            @PathVariable ("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable ("id") @NotNull UUID id)
     throws Exception{
         log.info("Update place with id = {}, update place info {}", id, placeDtoReq);
         return new ResponseEntity<>(placeServiceImpl.updatePlace(placeDtoReq, id), HttpStatus.OK);
@@ -101,7 +101,7 @@ public class PlaceController {
     })
     @GetMapping("/places/{id}")
     public ResponseEntity<PlaceDtoResp> getPlaceById(
-            @PathVariable ("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable ("id") @NotNull UUID id)
     throws Exception{
         log.info("Gets place with id = {}", id);
         return new ResponseEntity <> (placeServiceImpl.getPlaceById(id), HttpStatus.OK);
@@ -117,7 +117,7 @@ public class PlaceController {
     })
     @DeleteMapping("/places/{id}")
     public ResponseEntity<String> deletePlaceById(
-            @PathVariable ("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable ("id") @NotNull UUID id)
             throws Exception {
         log.info("Deletes place with id = {}", id);
         placeServiceImpl.deletePlaceById(id);

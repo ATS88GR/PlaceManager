@@ -34,6 +34,5 @@ public class PlaceDtoReq {
 
     @Schema(name = "countryId", description = "Country id", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
     @NotNull(message = "countryId should not be empty")
-    @org.hibernate.validator.constraints.UUID
     private UUID countryId;
 }

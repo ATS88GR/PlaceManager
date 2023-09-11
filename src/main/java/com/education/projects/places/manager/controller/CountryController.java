@@ -2,16 +2,12 @@ package com.education.projects.places.manager.controller;
 
 import com.education.projects.places.manager.entity.CountryPage;
 import com.education.projects.places.manager.entity.CountrySearchCriteria;
-import com.education.projects.places.manager.entity.PlacePage;
-import com.education.projects.places.manager.entity.PlaceSearchCriteria;
 import com.education.projects.places.manager.response.dto.CountryDtoResp;
-import com.education.projects.places.manager.response.dto.PlaceDtoResp;
 import com.education.projects.places.manager.service.CountryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +69,7 @@ public class CountryController {
     })
     @GetMapping("/countries/{id}")
     public ResponseEntity<CountryDtoResp> getCountryById(
-            @PathVariable("id") @NotNull @org.hibernate.validator.constraints.UUID UUID id)
+            @PathVariable("id") @NotNull UUID id)
             throws Exception {
         log.info("Gets country with id = {}", id);
         return new ResponseEntity<>(countryServiceImpl.getCountryDtoById(id), HttpStatus.OK);
