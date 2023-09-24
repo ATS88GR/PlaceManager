@@ -56,4 +56,4 @@ databaseChangeLog:
                     foreignKeyName: country_id
                     references: place_countries(id)
   - include:
-      file: changelog/0001/changelog.yaml
+      file: changelog/1.0/changelog.yaml

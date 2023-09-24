@@ -1,4 +1,4 @@
-package com.education.projects.places.manager.response;
+package com.education.projects.places.manager.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

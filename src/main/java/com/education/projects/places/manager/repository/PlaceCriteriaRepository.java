@@ -1,6 +1,6 @@
 package com.education.projects.places.manager.repository;
 
-import com.education.projects.places.manager.response.dto.PlaceDtoResp;
+import com.education.projects.places.manager.dto.response.PlaceDtoResp;
 import com.education.projects.places.manager.entity.Place;
 import com.education.projects.places.manager.entity.PlacePage;
 import com.education.projects.places.manager.entity.PlaceSearchCriteria;
@@ -12,7 +12,11 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -33,7 +37,7 @@ public class PlaceCriteriaRepository {
     }
 
     public Page<PlaceDtoResp> findAllWithFilters(PlacePage placePage,
-                                                 PlaceSearchCriteria placeSearchCriteria){
+                                                 PlaceSearchCriteria placeSearchCriteria) {
         CriteriaQuery<Place> criteriaQuery = criteriaBuilder.createQuery(Place.class);
         Root<Place> placeRoot = criteriaQuery.from(Place.class);
         Predicate predicate = getPredicate(placeSearchCriteria, placeRoot);
@@ -47,7 +51,7 @@ public class PlaceCriteriaRepository {
 
         Pageable pageable = getPageable(placePage);
 
-        long placesCount = 10;
+        long placesCount = getPlacesCount();
 
         return (new PageImpl<>(
                 placeMapper.placeListToPlaceDtoList(typedQuery.getResultList()),
@@ -55,7 +59,7 @@ public class PlaceCriteriaRepository {
                 placesCount));
     }
 
-    private long getPlacesCount(Predicate predicate) {
+    private long getPlacesCount() {
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Place> countRoot = countQuery.from(Place.class);
         countQuery.select(criteriaBuilder.count(countRoot));
@@ -70,7 +74,7 @@ public class PlaceCriteriaRepository {
     private void setOrder(PlacePage placePage,
                           CriteriaQuery<Place> criteriaQuery,
                           Root<Place> placeRoot) {
-        if(placePage.getSortDirection().equals(Sort.Direction.ASC)){
+        if (placePage.getSortDirection().equals(Sort.Direction.ASC)) {
             criteriaQuery.orderBy(criteriaBuilder.asc(placeRoot.get(placePage.getSortBy())));
         } else criteriaQuery.orderBy(criteriaBuilder.desc(placeRoot.get(placePage.getSortBy())));
     }
@@ -78,7 +82,7 @@ public class PlaceCriteriaRepository {
     private Predicate getPredicate(PlaceSearchCriteria placeSearchCriteria,
                                    Root<Place> placeRoot) {
         List<Predicate> predicates = new ArrayList<>();
-        if(Objects.nonNull(placeSearchCriteria.getAddress()))
+        if (Objects.nonNull(placeSearchCriteria.getAddress()))
             predicates.add(criteriaBuilder.like(placeRoot.get("address"),
                     "%" + placeSearchCriteria.getAddress() + "%"));
         return criteriaBuilder.and(predicates.toArray((new Predicate[0])));

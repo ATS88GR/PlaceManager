@@ -1,8 +1,8 @@
 package com.education.projects.places.manager.controller;
 
+import com.education.projects.places.manager.dto.response.CountryDtoResp;
 import com.education.projects.places.manager.entity.CountryPage;
 import com.education.projects.places.manager.entity.CountrySearchCriteria;
-import com.education.projects.places.manager.response.dto.CountryDtoResp;
 import com.education.projects.places.manager.service.CountryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,7 +38,7 @@ public class CountryController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/countries")
-    public ResponseEntity<Collection<CountryDtoResp>> getCountries() throws Exception {
+    public ResponseEntity<Collection<CountryDtoResp>> getCountries(){
         log.info("Get all countries info");
         return new ResponseEntity<>(countryServiceImpl.getAllCountries(), HttpStatus.OK);
     }
@@ -52,8 +52,7 @@ public class CountryController {
     })
     @GetMapping("/sortedFilteredCountries")
     public ResponseEntity<Page<CountryDtoResp>> getSortFilterCountriesCommon(CountryPage countryPage,
-                                                                             CountrySearchCriteria countrySearchCriteria)
-            throws Exception {
+                                                                             CountrySearchCriteria countrySearchCriteria) {
         log.info("Get common sorted and filtered country info");
         return new ResponseEntity<>(countryServiceImpl.getSortFilterPaginCountries(countryPage, countrySearchCriteria),
                 HttpStatus.OK);

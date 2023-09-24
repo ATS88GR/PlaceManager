@@ -8,6 +8,4 @@ import java.util.UUID;
 
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, UUID> {
-   /* @Query("select")
-    Collection <User> findAllByBrand();*/
 }

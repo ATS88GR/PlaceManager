@@ -1,12 +1,12 @@
 package com.education.projects.places.manager.service;
 
-import com.education.projects.places.manager.exception.EmptyException;
-import com.education.projects.places.manager.exception.PlaceNotFoundException;
-import com.education.projects.places.manager.request.dto.PlaceDtoReq;
-import com.education.projects.places.manager.response.dto.PlaceDtoResp;
+import com.education.projects.places.manager.dto.request.PlaceDtoReq;
+import com.education.projects.places.manager.dto.response.CountryDtoResp;
+import com.education.projects.places.manager.dto.response.PlaceDtoResp;
 import com.education.projects.places.manager.entity.Place;
 import com.education.projects.places.manager.entity.PlacePage;
 import com.education.projects.places.manager.entity.PlaceSearchCriteria;
+import com.education.projects.places.manager.exception.PlaceNotFoundException;
 import com.education.projects.places.manager.mapper.PlaceMapper;
 import com.education.projects.places.manager.repository.PlaceCriteriaRepository;
 import com.education.projects.places.manager.repository.PlaceRepository;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -44,7 +45,9 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceDtoResp createPlace(PlaceDtoReq placeDtoReq) throws Exception {
         Place place = placeMapper.placeDtoToPlace(placeDtoReq,
                 countryServiceImpl.getCountryById(placeDtoReq.getCountryId()));
-        return placeMapper.placeToPlaceDto(placeRepository.save(place));
+        return placeMapper.placeToPlaceDto(
+                placeRepository.save(place),
+                new CountryDtoResp(place.getCountry().getId(), place.getCountry().getCountryDescr()));
     }
 
     /**
@@ -60,7 +63,9 @@ public class PlaceServiceImpl implements PlaceService {
             Place placeToChange = placeMapper.placeDtoToPlace(placeDtoReq,
                     countryServiceImpl.getCountryById(placeDtoReq.getCountryId()));
             placeToChange.setId(id);
-            return placeMapper.placeToPlaceDto(placeRepository.save(placeToChange));
+            return placeMapper.placeToPlaceDto(
+                    placeRepository.save(placeToChange),
+                    new CountryDtoResp(placeToChange.getCountry().getId(), placeToChange.getCountry().getCountryDescr()));
         }
         throw new PlaceNotFoundException(id);
     }
@@ -70,11 +75,18 @@ public class PlaceServiceImpl implements PlaceService {
      *
      * @return The list of the Place objects
      */
-    public Collection<PlaceDtoResp> getAllPlaces() throws Exception {
-        Collection<PlaceDtoResp> placeDtoRespList =
-                placeMapper.placeListToPlaceDtoList(placeRepository.findAll());
-        if (placeDtoRespList.isEmpty()) throw new EmptyException();
+    public Collection<PlaceDtoResp> getAllPlaces() {
         return placeMapper.placeListToPlaceDtoList(placeRepository.findAll());
+    }
+
+    /**
+     * Gets places objects information from database by id Set
+     *
+     * @param uuidSet Set of uuid
+     * @return Collection of Place DTO
+     */
+    public Collection<PlaceDtoResp> getPlacesByIdList(Set<UUID> uuidSet) {
+        return placeMapper.placeListToPlaceDtoList(placeRepository.findAllById(uuidSet));
     }
 
     /**
@@ -85,8 +97,12 @@ public class PlaceServiceImpl implements PlaceService {
      * @throws Exception
      */
     public PlaceDtoResp getPlaceById(UUID id) throws Exception {
-        if (placeRepository.existsById(id))
-            return placeMapper.placeToPlaceDto(placeRepository.getReferenceById(id));
+        if (placeRepository.existsById(id)) {
+            Place place = placeRepository.getReferenceById(id);
+            return placeMapper.placeToPlaceDto(
+                    place,
+                    new CountryDtoResp(place.getCountry().getId(), place.getCountry().getCountryDescr()));
+        }
         throw new PlaceNotFoundException(id);
     }
 
@@ -105,14 +121,9 @@ public class PlaceServiceImpl implements PlaceService {
      * @param placePage           is an object with pagination settings
      * @param placeSearchCriteria is an object with search settings
      * @return List of users with pagination and search settings
-     * @throws Exception
      */
     public Page<PlaceDtoResp> getSortFilterPaginPlaces(PlacePage placePage,
-                                                       PlaceSearchCriteria placeSearchCriteria)
-            throws Exception {
-        Page<PlaceDtoResp> placeDtoResp =
-                placeCriteriaRepository.findAllWithFilters(placePage, placeSearchCriteria);
-        if (placeDtoResp.isEmpty()) throw new EmptyException();
-        return placeDtoResp;
+                                                       PlaceSearchCriteria placeSearchCriteria) {
+        return placeCriteriaRepository.findAllWithFilters(placePage, placeSearchCriteria);
     }
 }

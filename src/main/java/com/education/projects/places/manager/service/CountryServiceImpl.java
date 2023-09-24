@@ -1,13 +1,12 @@
 package com.education.projects.places.manager.service;
 
+import com.education.projects.places.manager.dto.response.CountryDtoResp;
+import com.education.projects.places.manager.entity.Country;
 import com.education.projects.places.manager.entity.CountryPage;
 import com.education.projects.places.manager.entity.CountrySearchCriteria;
 import com.education.projects.places.manager.exception.CountryNotFoundException;
-import com.education.projects.places.manager.exception.EmptyException;
-import com.education.projects.places.manager.repository.CountryCriteriaRepository;
-import com.education.projects.places.manager.response.dto.CountryDtoResp;
-import com.education.projects.places.manager.entity.Country;
 import com.education.projects.places.manager.mapper.CountryMapper;
+import com.education.projects.places.manager.repository.CountryCriteriaRepository;
 import com.education.projects.places.manager.repository.CountryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,8 @@ public class CountryServiceImpl implements CountryService {
      *
      * @return The list of the Country objects
      */
-    public Collection<CountryDtoResp> getAllCountries() throws Exception {
-        Collection<CountryDtoResp> countryDtoResp =
-                countryMapper.countryListToCountryDtoList(countryRepository.findAll());
-        if (countryDtoResp.isEmpty()) throw new EmptyException();
-        return countryDtoResp;
+    public Collection<CountryDtoResp> getAllCountries() {
+        return countryMapper.countryListToCountryDtoList(countryRepository.findAll());
     }
 
     /**
@@ -69,14 +65,9 @@ public class CountryServiceImpl implements CountryService {
      * @param countryPage           is an object with pagination settings
      * @param countrySearchCriteria is an object with search settings
      * @return List of users with pagination and search settings
-     * @throws Exception
      */
     public Page<CountryDtoResp> getSortFilterPaginCountries(CountryPage countryPage,
-                                                            CountrySearchCriteria countrySearchCriteria)
-            throws Exception {
-        Page<CountryDtoResp> countryDtoResp =
-                countryCriteriaRepository.findAllWithFilters(countryPage, countrySearchCriteria);
-        if (countryDtoResp.isEmpty()) throw new EmptyException();
-        return countryDtoResp;
+                                                            CountrySearchCriteria countrySearchCriteria) {
+        return countryCriteriaRepository.findAllWithFilters(countryPage, countrySearchCriteria);
     }
 }
