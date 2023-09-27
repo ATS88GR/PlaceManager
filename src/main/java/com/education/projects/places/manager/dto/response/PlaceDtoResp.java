@@ -1,12 +1,16 @@
 package com.education.projects.places.manager.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PlaceDtoResp {
 
     @Schema(name = "id", description = "Place id", example = "086d792e-7974-4fe4-b2e0-2dba9f79bed8")
