@@ -1,4 +1,4 @@
-package com.education.projects.places.manager.entity;
+package com.education.projects.places.manager.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;

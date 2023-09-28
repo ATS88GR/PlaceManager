@@ -4,8 +4,8 @@ import com.education.projects.places.manager.dto.request.PlaceDtoReq;
 import com.education.projects.places.manager.dto.response.CountryDtoResp;
 import com.education.projects.places.manager.dto.response.PlaceDtoResp;
 import com.education.projects.places.manager.entity.Place;
-import com.education.projects.places.manager.entity.PlacePage;
-import com.education.projects.places.manager.entity.PlaceSearchCriteria;
+import com.education.projects.places.manager.dto.request.PlacePage;
+import com.education.projects.places.manager.dto.request.PlaceSearchCriteria;
 import com.education.projects.places.manager.exception.PlaceNotFoundException;
 import com.education.projects.places.manager.mapper.PlaceMapper;
 import com.education.projects.places.manager.repository.PlaceCriteriaRepository;
@@ -114,7 +114,7 @@ public class PlaceServiceImpl implements PlaceService {
     public void deletePlaceById(UUID id) throws Exception {
         if (placeRepository.existsById(id))
             placeRepository.deleteById(id);
-        throw new PlaceNotFoundException(id);
+       else throw new PlaceNotFoundException(id);
     }
 
     /**

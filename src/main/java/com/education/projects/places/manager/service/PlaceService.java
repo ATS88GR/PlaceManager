@@ -2,8 +2,8 @@ package com.education.projects.places.manager.service;
 
 import com.education.projects.places.manager.dto.request.PlaceDtoReq;
 import com.education.projects.places.manager.dto.response.PlaceDtoResp;
-import com.education.projects.places.manager.entity.PlacePage;
-import com.education.projects.places.manager.entity.PlaceSearchCriteria;
+import com.education.projects.places.manager.dto.request.PlacePage;
+import com.education.projects.places.manager.dto.request.PlaceSearchCriteria;
 import org.springframework.data.domain.Page;
 
 import java.util.Collection;

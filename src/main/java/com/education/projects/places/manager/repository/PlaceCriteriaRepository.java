@@ -2,8 +2,8 @@ package com.education.projects.places.manager.repository;
 
 import com.education.projects.places.manager.dto.response.PlaceDtoResp;
 import com.education.projects.places.manager.entity.Place;
-import com.education.projects.places.manager.entity.PlacePage;
-import com.education.projects.places.manager.entity.PlaceSearchCriteria;
+import com.education.projects.places.manager.dto.request.PlacePage;
+import com.education.projects.places.manager.dto.request.PlaceSearchCriteria;
 import com.education.projects.places.manager.mapper.PlaceMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

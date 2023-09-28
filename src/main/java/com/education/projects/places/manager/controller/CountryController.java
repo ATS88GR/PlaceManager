@@ -1,8 +1,8 @@
 package com.education.projects.places.manager.controller;
 
 import com.education.projects.places.manager.dto.response.CountryDtoResp;
-import com.education.projects.places.manager.entity.CountryPage;
-import com.education.projects.places.manager.entity.CountrySearchCriteria;
+import com.education.projects.places.manager.dto.request.CountryPage;
+import com.education.projects.places.manager.dto.request.CountrySearchCriteria;
 import com.education.projects.places.manager.service.CountryServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

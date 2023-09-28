@@ -1,4 +1,4 @@
-package com.education.projects.places.manager.entity;
+package com.education.projects.places.manager.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
@@ -11,7 +11,12 @@ import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-public class CountryPage {
+public class CommonPage {
+
+    CommonPage(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
     @NotEmpty
     @Min(value = 0, message = "min value is 0")
     @Schema(name = "pageNumber", description = "Number of page", example = "0")
@@ -28,7 +33,7 @@ public class CountryPage {
 
     @NotBlank
     @Schema(name = "sortBy",
-            description = "Sorting by country description",
-            example = "countryDescr")
-    private String sortBy = "countryDescr";
+            description = "Sorting by example",
+            example = "example")
+    private String sortBy = "example";
 }

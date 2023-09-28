@@ -2,8 +2,8 @@ package com.education.projects.places.manager.controller;
 
 import com.education.projects.places.manager.dto.request.PlaceDtoReq;
 import com.education.projects.places.manager.dto.response.PlaceDtoResp;
-import com.education.projects.places.manager.entity.PlacePage;
-import com.education.projects.places.manager.entity.PlaceSearchCriteria;
+import com.education.projects.places.manager.dto.request.PlacePage;
+import com.education.projects.places.manager.dto.request.PlaceSearchCriteria;
 import com.education.projects.places.manager.service.PlaceServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -2,8 +2,8 @@ package com.education.projects.places.manager.repository;
 
 import com.education.projects.places.manager.dto.response.CountryDtoResp;
 import com.education.projects.places.manager.entity.Country;
-import com.education.projects.places.manager.entity.CountryPage;
-import com.education.projects.places.manager.entity.CountrySearchCriteria;
+import com.education.projects.places.manager.dto.request.CountryPage;
+import com.education.projects.places.manager.dto.request.CountrySearchCriteria;
 import com.education.projects.places.manager.mapper.CountryMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
