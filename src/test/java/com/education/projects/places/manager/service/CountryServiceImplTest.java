@@ -1,9 +1,9 @@
 package com.education.projects.places.manager.service;
 
-import com.education.projects.places.manager.dto.response.CountryDtoResp;
-import com.education.projects.places.manager.entity.Country;
 import com.education.projects.places.manager.dto.request.CountryPage;
 import com.education.projects.places.manager.dto.request.CountrySearchCriteria;
+import com.education.projects.places.manager.dto.response.CountryDtoResp;
+import com.education.projects.places.manager.entity.Country;
 import com.education.projects.places.manager.exception.CountryNotFoundException;
 import com.education.projects.places.manager.mapper.CountryMapper;
 import com.education.projects.places.manager.repository.CountryCriteriaRepository;
@@ -117,7 +117,7 @@ class CountryServiceImplTest {
 
         when(countryRepository.existsById(testUUID)).thenReturn(false);
 
-        assertThrows(CountryNotFoundException.class, ()-> countryService.getCountryDtoById(testUUID));
+        assertThrows(CountryNotFoundException.class, () -> countryService.getCountryDtoById(testUUID));
     }
 
     /**
