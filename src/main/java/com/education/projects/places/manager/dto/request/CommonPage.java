@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
@@ -17,12 +17,12 @@ public class CommonPage {
         this.sortBy = sortBy;
     }
 
-    @NotEmpty
+    @NotNull
     @Min(value = 0, message = "min value is 0")
     @Schema(name = "pageNumber", description = "Number of page", example = "0")
     private int pageNumber = 0;
 
-    @NotEmpty
+    @NotNull
     @Min(value = 1, message = "min value is 1")
     @Max(value = 50, message = "max value is 50")
     @Schema(name = "pageSize", description = "Size of page", example = "5")

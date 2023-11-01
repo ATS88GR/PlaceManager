@@ -1,22 +1,20 @@
 package com.education.projects.places.manager.controller;
 
 import com.education.projects.places.manager.dto.request.PlaceDtoReq;
-import com.education.projects.places.manager.dto.response.PlaceDtoResp;
 import com.education.projects.places.manager.dto.request.PlacePage;
 import com.education.projects.places.manager.dto.request.PlaceSearchCriteria;
+import com.education.projects.places.manager.dto.response.PlaceDtoResp;
 import com.education.projects.places.manager.service.PlaceServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +29,6 @@ import java.util.Set;
 import java.util.UUID;
 
 @RestController
-@Validated
 @Slf4j
 @Tag(name = "Places API")
 public class PlaceController {
@@ -64,7 +61,7 @@ public class PlaceController {
     @PutMapping("/places/{id}")
     public ResponseEntity<PlaceDtoResp> updatePlace(
             @Valid @RequestBody PlaceDtoReq placeDtoReq,
-            @PathVariable("id") @NotNull UUID id)
+            @PathVariable("id") UUID id)
             throws Exception {
         log.info("Update place with id = {}, update place info {}", id, placeDtoReq);
         return new ResponseEntity<>(placeServiceImpl.updatePlace(placeDtoReq, id), HttpStatus.OK);
@@ -92,7 +89,7 @@ public class PlaceController {
     })
     @GetMapping(value = "/placesByIdList")
     public ResponseEntity<Collection<PlaceDtoResp>> getPlacesByIdList(
-            @Valid @RequestParam Set<UUID> uuidSet) {
+            @RequestParam Set<UUID> uuidSet) {
         log.info("Get place info by Id list");
         return new ResponseEntity<>(placeServiceImpl.getPlacesByIdList(uuidSet), HttpStatus.OK);
     }
@@ -105,8 +102,9 @@ public class PlaceController {
             @ApiResponse(responseCode = "500", description = "Internal Server error")
     })
     @GetMapping("/sortedFilteredPlaces")
-    public ResponseEntity<Page<PlaceDtoResp>> getSortFilterPlacesCommon(PlacePage placePage,
-                                                                        PlaceSearchCriteria placeSearchCriteria) {
+    public ResponseEntity<Page<PlaceDtoResp>> getSortFilterPlacesCommon(
+            @Valid PlacePage placePage,
+            @Valid PlaceSearchCriteria placeSearchCriteria) {
         log.info("Get common sorted and filtered place info");
         return new ResponseEntity<>(placeServiceImpl.getSortFilterPaginPlaces(placePage, placeSearchCriteria),
                 HttpStatus.OK);
@@ -122,7 +120,7 @@ public class PlaceController {
     })
     @GetMapping("/places/{id}")
     public ResponseEntity<PlaceDtoResp> getPlaceById(
-            @PathVariable("id") @NotNull UUID id)
+            @PathVariable("id") UUID id)
             throws Exception {
         log.info("Gets place with id = {}", id);
         return new ResponseEntity<>(placeServiceImpl.getPlaceById(id), HttpStatus.OK);
@@ -138,7 +136,7 @@ public class PlaceController {
     })
     @DeleteMapping("/places/{id}")
     public ResponseEntity<String> deletePlaceById(
-            @PathVariable("id") @NotNull UUID id)
+            @PathVariable("id") UUID id)
             throws Exception {
         log.info("Deletes place with id = {}", id);
         placeServiceImpl.deletePlaceById(id);
